@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html ng-app="services">
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="scripts/angular.js"></script>
+</head>
+<body>
+
+    <div ng-controller="calculateController">
+        <p>
+            Operand 1: <input type="text" ng-model="operand1" />
+        </p>
+        <p>
+            Operand 2: <input type="text" ng-model="operand2" />
+        </p>    
+       <button ng-click="Add()">Add</button>
+       <button ng-click="Subtract()">Subtract</button>
+       <button ng-click="Divide()">Divide</button>
+       <button ng-click="Multiply()">Multiply</button> 
+        <p>Result: {{result}}</p>
+    </div>
+    <hr />
+
+    <h3>Use Factory Service to display employee data in the table</h3>
+    <div ng-controller="factoryController">
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>User ID</td>
+                    <td>Id Number</td>
+                    <td>Title</td>
+                    <td>Body</td>
+                </tr>
+                <tr ng-repeat="data in empToDo">
+                    <td>{{data.userId}}</td>
+                    <td>{{data.id}}</td>
+                    <td>{{data.title}}</td>
+                    <td>{{data.body}}</td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <hr />
+    <h3>Sample Use Constant Service</h3>
+    <div ng-controller="constantController">
+        <p>
+            Value of first config is: {{configValue.config1}}
+        </p>
+        <p>
+            Value of second config is: {{configValue.config2}}
+        </p>
+    </div>
+
+<script>
+
+    var app = angular.module("services", []);
+
+    //Assignment 1: Create a maths service. Make sure each service takes two args and returns result Create a controller
+    // having two properties inside scope and call methods from the controller
+    app.service("calculateService", function(){
+
+        this.add = function (a, b) {
+            return a + b;
+        }
+
+        this.subtract = function (a, b) {
+            return a - b;
+        }
+
+        this.divide = function (a, b) {
+            return a / b;
+        }
+
+        this.multiply = function (a, b) {
+            return a * b;
+        }
+
+    });
+
+    app.controller("calculateController", function ($scope, calculateService) {
+     
+        $scope.operand1 = 0.00;
+        $scope.operand2 = 0.00;
+        $scope.result = 0;
+
+        $scope.Add = function () {
+            $scope.result = calculateService.add(parseFloat($scope.operand1), parseFloat($scope.operand2));
+        }
+
+        $scope.Subtract = function () {
+            $scope.result = calculateService.subtract($scope.operand1, $scope.operand2);
+        }
+
+        $scope.Divide = function () {
+            $scope.result = calculateService.divide($scope.operand1, $scope.operand2);
+        }
+
+        $scope.Multiply = function () {
+            $scope.result = calculateService.multiply($scope.operand1, $scope.operand2);
+        }
+
+    });
+
+    //Assignment2: Create a constants service and show its usage in a controller
+    app.controller("constantController", function ($scope, fooConfig) {
+        $scope.configValue = fooConfig;
+    });
+
+    //Assignment 3 and 4: Create a factory service to display empdata in controller and view it in table.
+    app.controller("factoryController", function ($scope, tododata) {
+        tododata.success(function (data) {
+            $scope.empToDo = data;
+        })
+    });
+
+
+</script>
+
+<<script src="scripts/factory.js"></script>
+<script src="scripts/constant.js"></script>
+</body>
+</html>
